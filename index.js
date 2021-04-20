@@ -10,5 +10,9 @@ client.once('ready', () => {
 client.login(process.env.TOKEN);
 
 client.on('message', message => {
-	if (message.content.includes('ping')) message.channel.send('pong');
+	if (message.content.toLowerCase().includes('dani')) {
+		const dani = message.guild.emojis.cache.filter(emoji => emoji.name === 'dani');
+
+		message.react(dani.first());
+	}
 });
