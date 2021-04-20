@@ -10,6 +10,5 @@ client.once('ready', () => {
 client.login(process.env.TOKEN);
 
 client.on('message', message => {
-	console.log(message.createdTimestamp);
-	if (message.content.includes('Patrick')) message.channel.send('Star?');
+	if (message.content.includes('ping')) message.channel.send('pong');
 });
