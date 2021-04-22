@@ -2,7 +2,14 @@ require('dotenv').config();
 
 const { daniReact } = require('./utils/random');
 const { shameMe } = require('./utils/shame');
-const { makeNewPrivateChannel, getMyPermissions, getRolePermissions, getAdminRoles, isUserSpecial } = require('./utils/permissions')
+const {
+	makeNewPrivateChannel,
+	getMyPermissions, 
+	getRolePermissions, 
+	getAdminRoles, 
+	isUserSpecial, 
+	isUserOwner 
+} = require('./utils/permissions')
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -21,6 +28,11 @@ client.on('message', async message => {
 	}
 
 	else if (message.content.toLowerCase() === '!shameme') {
+		if (isUserOwner(message)) {
+			message.reply('Bad news, boss, this function doesn\'t work on you. Try something else.');
+			return;
+		}
+
 		shameMe(message, client);	
 	}
 
