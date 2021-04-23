@@ -1,16 +1,5 @@
 require('dotenv').config();
 
-const { daniReact } = require('./utils/random');
-const { shameMe } = require('./utils/shame');
-const {
-	makeNewPrivateChannel,
-	getMyPermissions, 
-	getRolePermissions, 
-	getAdminRoles, 
-	isUserSpecial, 
-	isUserOwner 
-} = require('./utils/permissions')
-
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
@@ -23,42 +12,26 @@ client.login(process.env.TOKEN);
 client.on('message', async message => {
 	if (message.author.bot) return;
 	
-	if (message.content.toLowerCase().includes('dani')) {
-		daniReact(message);
-	}
-
-	else if (message.content.toLowerCase() === '!shameme') {
-		if (isUserOwner(message)) {
-			message.reply('Bad news, boss, this function doesn\'t work on you. Try something else.');
-			return;
-		}
-
-		shameMe(message, client);	
-	}
-
-	else if (message.content.toLowerCase() === '!roles') {
-		message.channel.send(`Here are your roles:
-		${message.member.roles.cache.map(role => role.name === '@everyone' ? 'everyone' : role.name)}`);
-	}
-
-	else if (message.content.toLowerCase().startsWith('!make-channel')) {
-		makeNewPrivateChannel(message, message.content.split(' ').slice(1).join(' '));
-	}
-
-	else if (message.content.toLowerCase() === '!my-permissions') {
-		getMyPermissions(message);
-	}
-
-	else if (message.content.toLowerCase().startsWith('!role-permissions')) {
-		getRolePermissions(message);
-	}
-
-	else if (message.content.toLowerCase() === '!admin-roles') {
-		getAdminRoles(message);
-	}
-
-	else if (message.content.toLowerCase() === '?amispecial') {
-		isUserSpecial(message) ? message.channel.send('This paper here says so, but I\'m not so sure.') : message.channel.send('Nope!'); 
-	}
+	if (message.content.toLowerCase() === '!ping') message.reply('pong!');
 });
+
+client.on('voiceStateUpdate', update => {
+	// returns the name of the voice channel where the update occured - only works when exiting?
+	update.channel ? console.log('CHANNEL NAME', update.channel.name) : console.log('CHANNEL', update.channel);
+
+	// returns the channel ID, same issue as above, returns null when entering channel?
+	console.log('CHANNEL ID', update.channelID);
+
+	// comes back null on bot enter and exit, pretty sure this is just about the client user
+	console.log('CONNECTION', update.connection);
+
+	// returns the session ID of this member's connection - null on enter, ID on exit
+	console.log('SESSION ID', update.sessionID);
+
+	// returns the id of the user who triggered the update
+	console.log('ID', update.id);
+
+	// returns the username for the user who triggered the update
+	console.log('MEMBER', update.member.user.username);
+})
 
